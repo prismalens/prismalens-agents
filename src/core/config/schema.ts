@@ -65,7 +65,7 @@ export const AlertSourceConfigSchema = z.record(
 );
 
 export const PluginsConfigSchema = z.object({
-	runtime: z.enum(["process", "tmux"]).default("process"),
+	runtime: z.enum(["process", "tmux"]).default("tmux"),
 	reporter: z.enum(["file-watching", "ipc"]).default("file-watching"),
 	notifier: z.array(z.string()).default([]),
 });

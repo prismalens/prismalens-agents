@@ -21,7 +21,7 @@ describe("PlConfigSchema", () => {
 		expect(result.budget.max_concurrent_sub_agents).toBe(3);
 		expect(result.logging.level).toBe("info");
 		expect(result.logging.format).toBe("json");
-		expect(result.plugins.runtime).toBe("process");
+		expect(result.plugins.runtime).toBe("tmux");
 		expect(result.convergence.confidence_threshold).toBe(0.8);
 		expect(result.workspace.base_dir).toBe("~/.prismalens/investigations");
 	});

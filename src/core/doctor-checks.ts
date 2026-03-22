@@ -145,15 +145,23 @@ export async function runDoctorChecks(
 
 	// --- Informational checks ---
 
-	// tmux (only if configured)
-	if (config?.plugins.runtime === "tmux") {
-		const tmuxCheck = await checkCommand("tmux");
-		informational.push({
+	// tmux — required when configured as runtime (default), informational otherwise
+	const tmuxCheck = await checkCommand("tmux");
+	const tmuxIsDefault = !config || config.plugins.runtime === "tmux";
+	if (tmuxIsDefault) {
+		required.push({
 			name: "tmux",
 			pass: tmuxCheck.available,
 			message: tmuxCheck.available
 				? `tmux ${tmuxCheck.version ?? "(available)"}`
-				: "tmux not found — configured as runtime",
+				: "tmux not found — install tmux or set runtime: process in pl.config.yaml",
+			level: "required",
+		});
+	} else if (tmuxCheck.available) {
+		informational.push({
+			name: "tmux",
+			pass: true,
+			message: `tmux ${tmuxCheck.version ?? "(available)"} (not configured as runtime)`,
 			level: "info",
 		});
 	}

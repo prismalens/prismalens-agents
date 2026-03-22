@@ -262,10 +262,13 @@ export default defineCommand({
 
 		consola.log("");
 		consola.log(
-			`  Permissions: ${allowedTools.join(", ")} will be auto-approved per investigation.`,
+			`  Auto-approved: ${allowedTools.join(", ")} (via shell_allow_list).`,
 		);
 		consola.log(
-			'  Other commands will prompt for approval — choose "Always" to add to your global config.',
+			"  Other commands prompt for approval in the agent's terminal.",
+		);
+		consola.log(
+			"  Runtime: tmux (agents run in tmux windows — attach to interact).",
 		);
 		consola.log("");
 		consola.log(`  Run: pl investigate --repo org/repo --alert "AlertName"`);
