@@ -19,7 +19,7 @@
 		"prepublishOnly": "pnpm build"
 	},
 	"engines": {
-		"node": ">=20"
+		"node": ">=22"
 	},
 	"keywords": [
 		"investigation",
@@ -37,7 +37,7 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/prismalens-org/prismalens-agents.git"
+		"url": "https://github.com/prismalens/prismalens-agents.git"
 	},
 	"packageManager": "pnpm@10.26.2",
 	"dependencies": {
