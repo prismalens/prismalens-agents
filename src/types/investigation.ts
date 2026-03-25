@@ -10,13 +10,10 @@ export interface InvestigationContext {
 	investigationId: string;
 
 	/** How the investigation was initiated */
-	triggerType: "alert_hint" | "description" | "piped_payload" | "discover";
+	triggerType: "query" | "piped_payload" | "discover";
 
-	/** Alert name hint from --alert flag (if provided) */
-	alertHint?: string;
-
-	/** Free-text description from --describe flag (if provided) */
-	description?: string;
+	/** Investigation query from --query flag (alert name, error, or description) */
+	query?: string;
 
 	/** Raw JSON piped via stdin (if provided) */
 	pipedPayload?: Record<string, unknown>;

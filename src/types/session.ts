@@ -2,7 +2,7 @@ export interface SessionMetadata {
 	/** Investigation ID (short UUID, first 8 chars) */
 	sessionId: string;
 
-	/** Human-readable label derived from --alert or --describe */
+	/** Human-readable label derived from --query */
 	label: string;
 
 	/** Project key (CWD path with / → -, e.g., "-home-sumit-code-payment-api") */
@@ -38,11 +38,8 @@ export interface SessionMetadata {
 	/** Repository under investigation */
 	repo?: string;
 
-	/** Alert name hint (from --alert flag) */
-	alertHint?: string;
-
-	/** Free-text description (for --describe triggers) */
-	description?: string;
+	/** Investigation query (from --query flag) */
+	query?: string;
 
 	/** When the investigation started (ISO 8601) */
 	startedAt: string;

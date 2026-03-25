@@ -29,8 +29,8 @@ describe("DefaultWorkspace", () => {
 		const workspace = new DefaultWorkspace(tempDir);
 		const context = {
 			investigationId: "inv-test-001",
-			triggerType: "alert_hint" as const,
-			alertHint: "HighErrorRate",
+			triggerType: "query" as const,
+			query: "HighErrorRate",
 			configuredSources: [],
 			availableTools: [],
 			createdAt: new Date().toISOString(),
@@ -41,7 +41,7 @@ describe("DefaultWorkspace", () => {
 		const parsed = JSON.parse(content);
 
 		expect(parsed.investigationId).toBe("inv-test-001");
-		expect(parsed.alertHint).toBe("HighErrorRate");
+		expect(parsed.query).toBe("HighErrorRate");
 	});
 
 	it("cleanup immediate removes workspace", async () => {

@@ -25,7 +25,7 @@ export default defineCommand({
 		consola.log(`  Workspace:  ${session.workspacePath}`);
 		consola.log(`  Process:    ${session.processRef}`);
 		if (session.repo) consola.log(`  Repo:       ${session.repo}`);
-		if (session.alertHint) consola.log(`  Alert:      ${session.alertHint}`);
+		if (session.query) consola.log(`  Query:      ${session.query}`);
 		consola.log(`  Started:    ${session.startedAt}`);
 		consola.log(`  Updated:    ${session.updatedAt}`);
 		if (session.completedAt)

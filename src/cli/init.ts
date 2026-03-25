@@ -271,7 +271,7 @@ export default defineCommand({
 			"  Runtime: tmux (agents run in tmux windows — attach to interact).",
 		);
 		consola.log("");
-		consola.log(`  Run: pl investigate --repo org/repo --alert "AlertName"`);
+		consola.log(`  Run: pl investigate --repo org/repo -q "HighErrorRate"`);
 		consola.log("");
 	},
 });
