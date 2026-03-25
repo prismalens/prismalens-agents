@@ -25,7 +25,6 @@ export type {
 	AgentOutput,
 	AgentPlugin,
 	AgentTask,
-	CleanupPolicy,
 	NotifierEvent,
 	NotifierPlugin,
 	ReporterPlugin,

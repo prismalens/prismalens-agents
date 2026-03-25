@@ -17,8 +17,8 @@ export default defineConfig({
 				"src/cli/dispatch.ts", // Phase 3
 				"src/cli/report.ts", // Phase 3
 				"src/cli/report/**", // Phase 3
-				"src/cli/session.ts", // Phase 1
-				"src/cli/session/**", // Phase 1
+				"src/cli/session.ts", // router only, no logic to cover
+				"src/cli/session/**", // thin wrappers, tested via integration tests
 				"src/cli/status.ts", // Phase 4
 			],
 			thresholds: {

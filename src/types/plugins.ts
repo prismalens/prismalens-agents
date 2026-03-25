@@ -26,6 +26,10 @@ export interface RuntimeStartConfig {
 	cwd: string;
 	/** Timeout in milliseconds */
 	timeout?: number;
+	/** tmux session to join (undefined = create new session) */
+	sessionName?: string;
+	/** Name for the tmux window (e.g., "orchestrator", "gatherer-1") */
+	windowName?: string;
 }
 
 export interface RuntimeHandle {
@@ -33,9 +37,11 @@ export interface RuntimeHandle {
 	pid: number;
 	/** tmux session name (only for tmux runtime, undefined for process runtime) */
 	sessionName?: string;
-	/** Kill the process (SIGTERM → grace → SIGKILL) or kill the tmux session */
+	/** tmux window name (only for tmux runtime) */
+	windowName?: string;
+	/** Kill the process (SIGTERM → grace → SIGKILL) or kill the tmux window/session */
 	kill(): void;
-	/** Whether the process is still running (checks PID or tmux session existence) */
+	/** Whether the process is still running (checks PID or tmux window existence) */
 	isRunning(): boolean;
 	/** Promise that resolves when the process exits */
 	waitForExit(): Promise<{ exitCode: number }>;
@@ -131,9 +137,6 @@ export interface WorkspacePlugin {
 		options?: WorkspaceOptions,
 	): Promise<WorkspaceHandle>;
 
-	/** Clean up workspace according to retention policy */
-	cleanup(handle: WorkspaceHandle, policy: CleanupPolicy): Promise<void>;
-
 	/** Get the absolute filesystem path for a workspace */
 	getPath(handle: WorkspaceHandle): string;
 }
@@ -153,8 +156,6 @@ export interface WorkspaceHandle {
 	/** Absolute path to the workspace root */
 	path: string;
 }
-
-export type CleanupPolicy = "immediate" | "ttl" | "retain";
 
 // --- ReporterPlugin ---
 

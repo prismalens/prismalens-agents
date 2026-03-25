@@ -1,6 +1,12 @@
 export interface SessionMetadata {
-	/** Our investigation ID */
+	/** Investigation ID (short UUID, first 8 chars) */
 	sessionId: string;
+
+	/** Human-readable label derived from --alert or --describe */
+	label: string;
+
+	/** Project key (CWD path with / → -, e.g., "-home-sumit-code-payment-api") */
+	projectKey: string;
 
 	/** Agent backend's session/thread ID — used for native resume */
 	agentSessionId: string;

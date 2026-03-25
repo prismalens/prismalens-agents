@@ -23,7 +23,7 @@ describe("PlConfigSchema", () => {
 		expect(result.logging.format).toBe("json");
 		expect(result.plugins.runtime).toBe("tmux");
 		expect(result.convergence.confidence_threshold).toBe(0.8);
-		expect(result.workspace.base_dir).toBe("~/.prismalens/investigations");
+		expect(result.workspace.base_dir).toBe("~/.prismalens");
 	});
 
 	it("rejects invalid agent backend enum", () => {

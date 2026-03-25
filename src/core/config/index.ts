@@ -43,8 +43,6 @@ export interface PlConfig {
 	};
 	workspace: {
 		baseDir: string;
-		ttlMs: number;
-		failureTtlMs: number;
 	};
 	plugins: {
 		runtime: "process" | "tmux";

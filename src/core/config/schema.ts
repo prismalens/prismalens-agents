@@ -38,9 +38,7 @@ export const BudgetConfigSchema = z.object({
 });
 
 export const WorkspaceConfigSchema = z.object({
-	base_dir: z.string().default("~/.prismalens/investigations"),
-	ttl_ms: z.number().positive().default(3_600_000),
-	failure_ttl_ms: z.number().positive().default(86_400_000),
+	base_dir: z.string().default("~/.prismalens"),
 });
 
 export const InvestigationConfigSchema = z.object({
