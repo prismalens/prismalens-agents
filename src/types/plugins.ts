@@ -1,8 +1,5 @@
 import type { Finding } from "./findings.js";
-import type {
-	InvestigationContext,
-	InvestigationResult,
-} from "./investigation.js";
+import type { InvestigationResult } from "./investigation.js";
 
 // --- RuntimePlugin ---
 
@@ -142,12 +139,8 @@ export interface WorkspacePlugin {
 }
 
 export interface WorkspaceOptions {
-	/** Base directory for workspaces (default: ~/.prismalens/investigations/) */
+	/** Base directory for workspaces (default: ~/.prismalens/) */
 	baseDir?: string;
-	/** Pre-populate with context files */
-	context?: InvestigationContext;
-	/** Available tools metadata (included in context.json) */
-	tools?: Array<{ name: string; command: string; available: boolean }>;
 }
 
 export interface WorkspaceHandle {

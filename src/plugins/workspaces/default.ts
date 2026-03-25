@@ -36,14 +36,6 @@ export class DefaultWorkspace implements WorkspacePlugin {
 		await writeFile(join(dir, "findings.jsonl"), "", "utf-8");
 		await writeFile(join(dir, "pids.json"), "{}\n", "utf-8");
 
-		if (options?.context) {
-			await writeFile(
-				join(dir, "context.json"),
-				JSON.stringify(options.context, null, 2),
-				"utf-8",
-			);
-		}
-
 		return { investigationId, path: dir };
 	}
 

@@ -25,25 +25,6 @@ describe("DefaultWorkspace", () => {
 		expect(existsSync(join(handle.path, "stdout"))).toBe(true);
 	});
 
-	it("writes context.json when context provided", async () => {
-		const workspace = new DefaultWorkspace(tempDir);
-		const context = {
-			investigationId: "inv-test-001",
-			triggerType: "query" as const,
-			query: "HighErrorRate",
-			configuredSources: [],
-			availableTools: [],
-			createdAt: new Date().toISOString(),
-		};
-
-		const handle = await workspace.create("inv-test-001", { context });
-		const content = await readFile(join(handle.path, "context.json"), "utf-8");
-		const parsed = JSON.parse(content);
-
-		expect(parsed.investigationId).toBe("inv-test-001");
-		expect(parsed.query).toBe("HighErrorRate");
-	});
-
 	it("cleanup immediate removes workspace", async () => {
 		const workspace = new DefaultWorkspace(tempDir);
 		const handle = await workspace.create("inv-test-002");

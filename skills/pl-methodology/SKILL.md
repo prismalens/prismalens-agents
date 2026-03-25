@@ -18,7 +18,7 @@ Systematic approach to incident investigation using the prismalens orchestrator.
 
 Collect raw data from all available sources before forming conclusions.
 
-1. Read `context.json` to understand what triggered this investigation
+1. Read the investigation context from your prompt to understand what triggered this investigation
 2. Identify all configured alert sources and their availability
 3. Query each available source for related signals within ±30 minutes of the trigger
 4. Report each data point as a finding immediately — never batch

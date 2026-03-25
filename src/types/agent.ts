@@ -24,7 +24,7 @@ export interface SubAgentInfo {
 	findingsCount: number;
 }
 
-/** Available tool/CLI info included in context.json */
+/** Available tool/CLI info injected into the orchestrator prompt */
 export interface ToolInfo {
 	/** Tool name (e.g., "gh", "amtool", "sentry-cli") */
 	name: string;
