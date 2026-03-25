@@ -79,39 +79,39 @@ export async function runDoctorChecks(
 		level: "required",
 	});
 
-	// 3. Model API key
-	const hasApiKey =
-		process.env.ANTHROPIC_API_KEY !== undefined ||
-		process.env.OPENAI_API_KEY !== undefined;
-	required.push({
-		name: "API key",
-		pass: hasApiKey,
-		message: hasApiKey
-			? "API key configured"
-			: "Set ANTHROPIC_API_KEY or OPENAI_API_KEY",
-		level: "required",
-	});
-
-	// 4. curl installed
+	// 3. curl available (informational — agent can use fetch/node if missing)
 	const curlCheck = await checkCommand("curl");
-	required.push({
+	informational.push({
 		name: "curl",
 		pass: curlCheck.available,
 		message: curlCheck.available
 			? `curl ${curlCheck.version ?? "(available)"}`
-			: "curl not found — required for HTTP API fallback",
-		level: "required",
+			: "curl not found — agent will use alternative HTTP methods",
+		level: "info",
 	});
 
-	// 5. jq installed
+	// 4. jq available (informational — agent can parse JSON natively)
 	const jqCheck = await checkCommand("jq");
-	required.push({
+	informational.push({
 		name: "jq",
 		pass: jqCheck.available,
 		message: jqCheck.available
 			? `jq ${jqCheck.version ?? "(available)"}`
-			: "jq not found — required for JSON processing",
-		level: "required",
+			: "jq not found — agent will parse JSON natively",
+		level: "info",
+	});
+
+	// 5. API key (informational — agent CLI manages its own auth)
+	const hasApiKey =
+		process.env.ANTHROPIC_API_KEY !== undefined ||
+		process.env.OPENAI_API_KEY !== undefined;
+	informational.push({
+		name: "API key",
+		pass: hasApiKey,
+		message: hasApiKey
+			? "API key configured"
+			: "No API key detected — agent CLI will handle auth on launch",
+		level: "info",
 	});
 
 	// 6. Config valid (only if config was provided — means it already parsed successfully)
