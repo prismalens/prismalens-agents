@@ -12,14 +12,13 @@ export default defineConfig({
 			exclude: [
 				"src/types/**/*.ts",
 				"src/__tests__/**",
-				// Phase -1 stubs — not yet implemented, remove exclusions when implemented:
-				"src/cli/investigate.ts", // Phase 4
-				"src/cli/dispatch.ts", // Phase 3
-				"src/cli/report.ts", // Phase 3
-				"src/cli/report/**", // Phase 3
-				"src/cli/session.ts", // router only, no logic to cover
-				"src/cli/session/**", // thin wrappers, tested via integration tests
-				"src/cli/status.ts", // Phase 4
+				"src/cli/investigate.ts", // Phase 2c — wired next
+				"src/cli/report.ts", // router only
+				"src/cli/session.ts", // router only
+				"src/cli/report/**", // tested via integration tests
+				"src/cli/session/**", // tested via integration tests
+				"src/cli/dispatch.ts", // tested via integration tests
+				"src/cli/status.ts", // tested via integration tests
 			],
 			thresholds: {
 				statements: 80,

@@ -1,3 +1,5 @@
+import { appendFile } from "node:fs/promises";
+import { join } from "node:path";
 import { defineCommand } from "citty";
 
 export default defineCommand({
@@ -8,8 +10,26 @@ export default defineCommand({
 			description: "Status: gathering, analyzing, resolving",
 		},
 	},
-	run({ args }) {
-		console.log("pl report status is not yet implemented");
-		console.log("args:", args);
+	async run({ args }) {
+		const workspace = process.env["PL_WORKSPACE"];
+		const agentId = process.env["PL_AGENT_ID"] ?? "unknown";
+
+		if (!workspace) {
+			console.error("PL_WORKSPACE env var not set");
+			process.exit(1);
+		}
+
+		const event = {
+			type: "status",
+			status: String(args._),
+			agentId,
+			timestamp: new Date().toISOString(),
+		};
+
+		await appendFile(
+			join(workspace, "findings.jsonl"),
+			`${JSON.stringify(event)}\n`,
+			"utf-8",
+		);
 	},
 });

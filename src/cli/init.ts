@@ -7,6 +7,7 @@ import { x } from "tinyexec";
 import { stringify as yamlStringify } from "yaml";
 import { checkCommand } from "../core/check-tool.js";
 import { loadConfig } from "../core/config/index.js";
+import { detectRepo } from "../core/detect-repo.js";
 import { runDoctorChecks } from "../core/doctor-checks.js";
 
 const AGENT_BACKENDS = [
@@ -73,20 +74,7 @@ export default defineCommand({
 		consola.log("");
 
 		// Auto-detect repo from git remote
-		let detectedRepo: string | undefined;
-		try {
-			const gitResult = await x("git", ["remote", "get-url", "origin"]);
-			const remoteUrl = gitResult.stdout.trim();
-			// Extract owner/repo from HTTPS or SSH URLs
-			const match = remoteUrl.match(
-				/(?:github\.com|gitlab\.com|bitbucket\.org)[/:](.+?)(?:\.git)?$/,
-			);
-			if (match?.[1]) {
-				detectedRepo = match[1];
-			}
-		} catch {
-			// Not a git repo or no remote — skip
-		}
+		const detectedRepo = await detectRepo();
 
 		if (detectedRepo) {
 			consola.info(`  Detected repo: ${detectedRepo}`);
