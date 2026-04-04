@@ -71,9 +71,19 @@ Spawn and manage investigation sub-agents. Only callable by the orchestrator.
 ### Spawn a sub-agent
 
 ```bash
+# Basic dispatch
 pl dispatch --role gatherer --task "Check Alertmanager for firing alerts related to payment-api"
 pl dispatch --role analyst --task "Analyze commit abc123 for connection pool changes"
 pl dispatch --role resolver --task "Draft rollback plan for v2.3.1"
+
+# With hypothesis context (passed to sub-agent prompt)
+pl dispatch --role gatherer --task "Fetch OOM logs from last 2h" --context '{"hypothesis":"OOM after deploy","confidence":0.6}'
+
+# With model override (use cheaper model for simple tasks)
+pl dispatch --role gatherer --task "List recent deploys" --model claude-haiku-4-5-20251001
+
+# With checklist item tracking
+pl dispatch --role analyst --task "Verify connection pool config" --context '{"hypothesis":"Pool exhaustion","confidence":0.7,"checklistItemId":"c-003"}'
 ```
 
 | Flag | Type | Required | Description |
@@ -81,6 +91,10 @@ pl dispatch --role resolver --task "Draft rollback plan for v2.3.1"
 | `--role` | `gatherer\|analyst\|resolver` | Yes | Agent role |
 | `--task` | string | Yes | Task description |
 | `--timeout` | number | No | Agent timeout in seconds (default: 120) |
+| `--model` | string | No | LLM model override for this sub-agent |
+| `--context` | JSON string | No | Hypothesis context: `{"hypothesis","confidence","checklistItemId","siblings"}` |
+| `--budget-tokens` | number | No | Remaining token budget for this sub-agent |
+| `--agent` | string | No | Override agent backend (claude-code, deepagents, opencode) |
 
 **Output:** Agent ID to stdout (e.g., `agent-001`).
 
@@ -90,7 +104,7 @@ pl dispatch --role resolver --task "Draft rollback plan for v2.3.1"
 pl dispatch --list
 ```
 
-Returns JSON array with `agentId`, `role`, `task`, `status`, `pid`, `startedAt`, `durationMs`, `findingsCount`.
+Returns JSON array with `agentId`, `role`, `task`, `status` (live-checked: `active` or `exited`).
 
 ### Read sub-agent output
 

@@ -10,9 +10,35 @@ function sleep(ms: number): Promise<void> {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+// biome-ignore lint/suspicious/noControlCharactersInRegex: intentional — stripping dangerous control chars for shell safety
+const CONTROL_CHARS_RE = /[\x00-\x08\x0b\x0c\x0e-\x1f\x1b\x7f]/g;
+
+/** Escape a value for safe use in a shell env-prefix (KEY='value') */
+function shellEscape(value: string): string {
+	// Strip control characters that could break tmux send-keys or
+	// enable terminal escape injection, then single-quote for shell safety
+	const safe = value
+		.replace(CONTROL_CHARS_RE, "")
+		.replace(/\r/g, "")
+		.replace(/\n/g, "\\n");
+	return `'${safe.replace(/'/g, "'\\''")}'`;
+}
+
+const ENV_KEY_RE = /^[A-Za-z_][A-Za-z0-9_]*$/;
+
+/** Build a KEY=val prefix string for passing env vars to a tmux command */
+function buildEnvPrefix(env: Record<string, string>): string {
+	return Object.entries(env)
+		.filter(([k]) => ENV_KEY_RE.test(k))
+		.map(([k, v]) => `${k}=${shellEscape(v)}`)
+		.join(" ");
+}
+
 export class TmuxRuntime implements RuntimePlugin {
 	async start(config: RuntimeStartConfig): Promise<RuntimeHandle> {
-		const command = config.command.join(" ");
+		const rawCommand = config.command.map((arg) => shellEscape(arg)).join(" ");
+		const envPrefix = buildEnvPrefix(config.env ?? {});
+		const command = envPrefix ? `${envPrefix} ${rawCommand}` : rawCommand;
 		const windowName = config.windowName ?? "agent";
 
 		const sessionName =

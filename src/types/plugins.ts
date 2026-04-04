@@ -27,6 +27,10 @@ export interface RuntimeStartConfig {
 	sessionName?: string;
 	/** Name for the tmux window (e.g., "orchestrator", "gatherer-1") */
 	windowName?: string;
+	/** Spawn detached in background — don't inherit stdio, don't block (process runtime only) */
+	background?: boolean;
+	/** Path for stdout/stderr capture when background is true */
+	logFile?: string;
 }
 
 export interface RuntimeHandle {
@@ -70,6 +74,8 @@ export interface AgentTask {
 	role: "orchestrator" | "gatherer" | "analyst" | "resolver";
 	/** Workspace path */
 	workspacePath: string;
+	/** Override prompt file name relative to workspacePath (default: .prompt.md) */
+	promptFile?: string;
 }
 
 export interface AgentLaunchConfig {

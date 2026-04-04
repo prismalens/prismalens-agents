@@ -1,4 +1,5 @@
 import { spawn } from "node:child_process";
+import { closeSync, openSync } from "node:fs";
 import type {
 	RuntimeHandle,
 	RuntimePlugin,
@@ -10,6 +11,10 @@ export class ProcessRuntime implements RuntimePlugin {
 		const [cmd, ...args] = config.command;
 		if (!cmd) {
 			throw new Error("RuntimeStartConfig.command must not be empty");
+		}
+
+		if (config.background) {
+			return this.startBackground(cmd, args, config);
 		}
 
 		const child = spawn(cmd, args, {
@@ -66,6 +71,52 @@ export class ProcessRuntime implements RuntimePlugin {
 			},
 			waitForExit() {
 				return exitPromise;
+			},
+		};
+	}
+
+	private startBackground(
+		cmd: string,
+		args: string[],
+		config: RuntimeStartConfig,
+	): RuntimeHandle {
+		const logFd = config.logFile ? openSync(config.logFile, "a") : null;
+		const outStream = logFd !== null ? logFd : "ignore";
+
+		const child = spawn(cmd, args, {
+			cwd: config.cwd,
+			env: { ...process.env, ...config.env },
+			stdio: ["ignore", outStream, outStream],
+			detached: true,
+		});
+
+		const pid = child.pid ?? -1;
+		child.unref();
+
+		// Close parent's copy of the FD — child inherited its own copy via spawn
+		if (logFd !== null) {
+			closeSync(logFd);
+		}
+
+		return {
+			pid,
+			kill() {
+				try {
+					process.kill(pid, "SIGTERM");
+				} catch {
+					// already dead
+				}
+			},
+			isRunning() {
+				try {
+					process.kill(pid, 0);
+					return true;
+				} catch {
+					return false;
+				}
+			},
+			waitForExit() {
+				return Promise.resolve({ exitCode: -1 });
 			},
 		};
 	}

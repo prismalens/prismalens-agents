@@ -67,7 +67,7 @@ describe("TmuxRuntime", () => {
 			"pl-inv-test",
 			"-n",
 			"gatherer-1",
-			"echo hello",
+			"'echo' 'hello'",
 		]);
 	});
 
